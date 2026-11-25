@@ -1,0 +1,47 @@
+name: Build HUDDLE APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate Android platform files
+        run: |
+          flutter create --org app.huddle --project-name huddle --platforms=android .
+          rm -rf test
+
+      - name: Patch manifest (permissions + app name)
+        run: python3 tools/patch_manifest.py
+
+      - name: Bundle offline fonts
+        run: ./tools/fetch_fonts.sh
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build release APK
+        run: |
+          flutter build apk --release \
+            --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HUDDLE-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
