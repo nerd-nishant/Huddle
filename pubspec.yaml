@@ -1,0 +1,32 @@
+name: huddle
+description: HUDDLE - the campus app. Private chats, QR attendance, updates, fests and offline notes.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  supabase_flutter: ^2.8.0
+  google_fonts: ^6.2.1
+  mobile_scanner: ^6.0.2
+  qr_flutter: ^4.1.0
+  geolocator: ^13.0.2
+  sqflite: ^2.4.1
+  path: ^1.9.0
+  path_provider: ^2.1.5
+  file_picker: ^8.1.6
+  open_filex: ^4.6.0
+  connectivity_plus: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/google_fonts/
